@@ -1,37 +1,42 @@
-from flask import render_template, flash, redirect, url_for, request
-from app import app, db, login_manager, User, Station, Reservation
-from forms import LoginForm, RegistrationForm
-from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.urls import url_parse
+from flask import render_template, redirect, url_for
+from flask_login import login_required
+from app import app, db, Station, Reservation, User
+from forms import ReservationForm
 
 
 @app.route('/')
-@app.route('/index')
-def index():
-    user = {'username': 'Eduardo'}
-    return render_template('home.html', title='Home', user=user)
+def home():
+    stations = Station.query.all()
+    return render_template('home.html', stations=stations)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
-        return redirect(url_for('index'))
-    return render_template('login.html', title='Sign In', form=form)
 
-@app.route('/station/<int:station_id>')
+@app.route('/station/<int:station_id>', methods=['GET', 'POST'])
 @login_required
 def station(station_id):
     station = Station.query.get(station_id)
     if station is None:
         return redirect(url_for('home'))
-    return render_template('station.html', station=station)
+
+    form = ReservationForm()
+    if form.validate_on_submit():
+        new_reservation = Reservation(start_time=form.start_time.data,
+                                      end_time=form.end_time.data,
+                                      user_id=current_user.id,
+                                      station_id=station.id)
+        db.session.add(new_reservation)
+        db.session.commit()
+        flash('Your reservation has been made!')
+        return redirect(url_for('station', station_id=station_id))
+
+    return render_template('station.html', station=station, reservation_form=form)
+
 
 @app.route('/admin')
 @login_required
 def admin():
+    # Only allow access if the current user is an employee
     if not current_user.is_employee:
         return redirect(url_for('home'))
+
     reservations = Reservation.query.all()
     return render_template('admin.html', reservations=reservations)

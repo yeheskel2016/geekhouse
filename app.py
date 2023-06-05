@@ -149,6 +149,9 @@ class Reservation(db.Model):
             duration = (self.end_time - self.start_time).seconds / 3600
         return duration * self.station.price_per_hour
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 def close_all_stations():
     for station in Station.query.all():
