@@ -1,6 +1,6 @@
 from flask import Flask, render_template
-import app, db
-import User, Station, Reservation
+from . import app
+
 
 def close_all_stations():
     for station in Station.query.all():
@@ -18,12 +18,12 @@ def create_initial_data():
     if db.session.query(User).count() > 0:
         return
     # Create some users
-    edo = User(name="Edo", phone_number='+972526362822', email="Edo@yeheskel.co.il", is_employee=True)
+    edo = User(name="Edo", username='edoroom', phone_number='+972526362822', email="Edo@yeheskel.co.il", is_employee=True)
     edo.set_password("416057")
-    shiel = User(name="Shiel", email="Shielhad@gmail.com")
-    shiel.set_password("416057")
+    test = User(name="test", username='test', phone_number='+972557238046', email="Shielhad@gmail.com")
+    test.set_password("416057")
 
-    db.session.add_all([edo, shiel])
+    db.session.add_all([edo, test])
 
     # Create some stations
     station = Station(name="Snooker Table", price_per_hour=45)

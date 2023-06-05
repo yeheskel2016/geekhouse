@@ -1,7 +1,8 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
-import db
+from . import db
+
 
 class Station(db.Model):
     __tablename__ = 'stations'
@@ -90,11 +91,15 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     phone_number = db.Column(db.String)
-    email = db.Column(db.String)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String)
     is_employee = db.Column(db.Boolean, default=False)
 
     reservations = db.relationship('Reservation', back_populates='user')
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 
     def set_password(self, password):
