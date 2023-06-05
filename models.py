@@ -1,7 +1,7 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
-from geekhouse import db
+import db
 
 class Station(db.Model):
     __tablename__ = 'stations'

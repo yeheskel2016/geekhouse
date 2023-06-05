@@ -1,9 +1,9 @@
 from flask import render_template, redirect, url_for
 from flask_login import login_required, current_user
-from geekhouse import app, db
-from geekhouse.models import Station, Reservation
-from geekhouse.forms import LoginForm, RegistrationForm, ReservationForm
-
+import Station, Reservation
+import LoginForm, RegistrationForm, ReservationForm
+from app import app
+from models import User
 @app.route('/')
 def home():
     stations = Station.query.all()
