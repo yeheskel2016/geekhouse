@@ -1,6 +1,6 @@
 from flask import Flask, render_template
-from . import app, db
-from .models import User, Station, Reservation
+from geekhouse import app, db
+from geekhouse.models import User, Station, Reservation
 
 def close_all_stations():
     for station in Station.query.all():
@@ -62,5 +62,7 @@ def update_ETA(station_id, new_ETA):
 
 
 if __name__ == "__main__":
-    create_initial_data()
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+        create_initial_data()
+        app.run(host='0.0.0.0', port=5000, debug=True)
