@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ station.name }}</h1>
+        <p>Price per hour: ${{ station.price_per_hour }}</p>
+        <p>VIP: {{ "Yes" if station.is_vip else "No" }}</p>
+        <p>Open: {{ "Yes" if station.is_open else "No" }}</p>
+
+        <!-- Include a form for reservation -->
+        <!-- Assume ReservationForm is passed to render_template in station route -->
+        <form method="POST">
+            {{ reservation_form.hidden_tag() }}
+            <div class="form-group">
+                {{ reservation_form.start_time.label }}: {{ reservation_form.start_time }}
+            </div>
+            <div class="form-group">
+                {{ reservation_form.end_time.label }}: {{ reservation_form.end_time }}
+            </div>
+            <div class="form-group">
+                {{ reservation_form.submit }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
