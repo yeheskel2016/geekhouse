@@ -10,4 +10,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # this will silence the wa
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 
-from . import models, routes  # This should come at the end to avoid circular dependencies
+from . import models, routes, forms  # This should come at the end
