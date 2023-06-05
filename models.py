@@ -6,15 +6,15 @@ from . import db
 class Station(db.Model):
     __tablename__ = 'stations'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    price_per_hour = Column(Integer)
-    is_vip = Column(Boolean, default=False)
-    is_open = Column(Boolean, default=True)
-    actual_start = Column(DateTime, default=None)
-    actual_end = Column(DateTime, default=None)
-    ETA = Column(DateTime, default=None)
-    reservations = relationship('Reservation', back_populates='station')
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    price_per_hour = db.Column(db.Integer)
+    is_vip = db.Column(db.Boolean, default=False)
+    is_open = db.Column(db.Boolean, default=True)
+    actual_start = db.Column(db.DateTime, default=None)
+    actual_end = db.Column(db.DateTime, default=None)
+    ETA = db.Column(db.DateTime, default=None)
+    reservations = db.relationship('Reservation', back_populates='station')
 
     def check_availability(self, start_time, end_time):
         for reservation in self.reservations:
@@ -87,14 +87,14 @@ class Station(db.Model):
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    phone_number = Column(String)
-    email = Column(String)
-    password_hash = Column(String)
-    is_employee = Column(Boolean, default=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    phone_number = db.Column(db.String)
+    email = db.Column(db.String)
+    password_hash = db.Column(db.String)
+    is_employee = db.Column(db.Boolean, default=False)
 
-    reservations = relationship('Reservation', back_populates='user')
+    reservations = db.relationship('Reservation', back_populates='user')
 
 
     def set_password(self, password):
@@ -105,17 +105,16 @@ class User(db.Model):
 class Reservation(db.Model):
     __tablename__ = 'reservations'
 
-    id = Column(Integer, primary_key=True)
-    start_time = Column(DateTime)
-    end_time = Column(DateTime)
-    actual_start = Column(DateTime)
-    actual_end = Column(DateTime)
-    station_id = Column(Integer, ForeignKey('stations.id'))
-    station = relationship('Station', back_populates='reservations')
-    user_id = Column(Integer, ForeignKey('users.id'))
-    # user = relationship('User')
+    id = db.Column(db.Integer, primary_key=True)
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
+    actual_start = db.Column(db.DateTime)
+    actual_end = db.Column(db.DateTime)
+    station_id = db.Column(db.Integer, db.ForeignKey('stations.id'))
+    station = db.relationship('Station', back_populates='reservations')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    user = relationship('User', back_populates='reservations')
+    user = db.relationship('User', back_populates='reservations')
 
     @staticmethod
     def make_reservation(user, station, start_time, end_time):
