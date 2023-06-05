@@ -1,6 +1,6 @@
 from flask import Flask, render_template
-from geekhouse import app, db
-from geekhouse.models import User, Station, Reservation
+import app, db
+import User, Station, Reservation
 
 def close_all_stations():
     for station in Station.query.all():
