@@ -1,8 +1,9 @@
-from flask_login import login_required, current_user
-from flask import render_template, flash, redirect, url_for
-from . import app
-from .forms import LoginForm
-from .models import User
+from flask import render_template, flash, redirect, url_for, request
+from app import app, db, login_manager
+from forms import LoginForm, RegistrationForm
+from models import User, Station, Reservation
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
 
 
 @app.route('/')

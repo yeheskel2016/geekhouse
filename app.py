@@ -1,7 +1,19 @@
-from flask import Flask, render_template
-from . import app
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'testingidc'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///geekhouse10.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # this will silence the warning
+db = SQLAlchemy(app)
+
+from models import User, Station, Reservation
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 def close_all_stations():
     for station in Station.query.all():
         station.close_station()
@@ -60,6 +72,7 @@ def update_ETA(station_id, new_ETA):
     station.ETA = new_ETA
     session.commit()
 
+from routes import *
 
 if __name__ == "__main__":
     with app.app_context():
