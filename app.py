@@ -1,6 +1,5 @@
 from . import app, db
-from .models import Station, User, Reservation
-from .routes import *
+from models import Station, User, Reservation
 
 def close_all_stations():
     for station in Station.query.all():

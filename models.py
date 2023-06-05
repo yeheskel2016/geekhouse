@@ -1,14 +1,9 @@
-from . import db
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 import pytz
+from . import db
 
-Base = declarative_base()
-
-class Station(Base):
+class Station(db.Model):
     __tablename__ = 'stations'
 
     id = Column(Integer, primary_key=True)
@@ -89,8 +84,7 @@ class Station(Base):
             available_slots = [slot for slot in available_slots if slot[0] >= self.ETA]
 
         return available_slots
-
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
@@ -108,7 +102,7 @@ class User(Base):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-class Reservation(Base):
+class Reservation(db.Model):
     __tablename__ = 'reservations'
 
     id = Column(Integer, primary_key=True)
