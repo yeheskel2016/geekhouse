@@ -208,6 +208,8 @@ def update_ETA(station_id, new_ETA):
     station.ETA = new_ETA
     session.commit()
 
+from routes import *
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
